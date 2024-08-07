@@ -21,15 +21,18 @@ const Positive = ( { goodFeedback, total }) => {
 
 const Statistics = ({ feedbacks }) => {
     const { good,neutral, bad, total } = feedbacks
+
+    if (!total) return <p>No feedback given</p>
+
     return (
-        <div>
+        <>
             <p>good {good}</p>
             <p>neutral {neutral}</p>
             <p>bad {bad}</p>
             <Total total={total}/>
             <Average feedbacks={good - bad} total={total}/>
             <Positive goodFeedback={good} total={total}/>
-        </div>
+        </>
     )
 }
 
