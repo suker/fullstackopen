@@ -2,7 +2,6 @@ import { useState } from "react";
 
 
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
-const Statistic = ( { text, result }) => <p>{text}: {result}</p>
 const Total = ( { total }) => <p>all {total}</p>
 const Average = ( {feedbacks, total} ) => {
 
@@ -13,11 +12,24 @@ const Average = ( {feedbacks, total} ) => {
         <p>average {feedbacks/total}</p>
     )
 }
-
-const Positive = ( { good, total }) => {
-    if (!good || !total) return <p>No positive feedback yet :(</p>
+const Positive = ( { goodFeedback, total }) => {
+    if (!goodFeedback || !total) return <p>No positive feedback yet :(</p>
     return (
-        <p>Positive {good/total*100} %</p>
+        <p>Positive {goodFeedback/total*100} %</p>
+    )
+}
+
+const Statistics = ({ feedbacks }) => {
+    const { good,neutral, bad, total } = feedbacks
+    return (
+        <div>
+            <p>good {good}</p>
+            <p>neutral {neutral}</p>
+            <p>bad {bad}</p>
+            <Total total={total}/>
+            <Average feedbacks={good - bad} total={total}/>
+            <Positive goodFeedback={good} total={total}/>
+        </div>
     )
 }
 
@@ -32,21 +44,21 @@ const App = () => {
         setGood(goodFeedback)
         const totalFeedback = goodFeedback + bad + neutral
         setTotal(totalFeedback)
-        // console.log("total:", totalFeedback)
+        console.log("total:", totalFeedback)
     }
     const handleNeutralFeedback = () => {
         const neutralFeedback = neutral + 1
         setNeutral(neutralFeedback)
         const totalFeedback = neutralFeedback + bad + good
         setTotal(totalFeedback)
-        // console.log("total:", totalFeedback)
+        console.log("total:", totalFeedback)
     }
     const handleBadFeedback = () => {
         const badFeeback = bad + 1
         setBad(badFeeback)
         const totalFeedback = badFeeback + neutral + good
         setTotal(totalFeedback)
-        // console.log("total:", totalFeedback)
+        console.log("total:", totalFeedback)
     }
 
 
@@ -57,12 +69,7 @@ const App = () => {
             <Button onClick={handleNeutralFeedback} text='neutral'/>
             <Button onClick={handleBadFeedback} text='bad'/>
             <h2>Statistics</h2>
-            <Statistic text='good' result={good}/>
-            <Statistic text='neutral' result={neutral}/>
-            <Statistic text='bad' result={bad}/>
-            <Total total={total}/>
-            <Average feedbacks={good-bad} total={total}/>
-            <Positive good={good} total={total}/>
+            <Statistics feedbacks={{good, neutral, bad, total}}/>
         </main>
     )
 }
