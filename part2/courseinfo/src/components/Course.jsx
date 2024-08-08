@@ -1,40 +1,22 @@
-const Header = (props) => {
-    console.log(props)
-    return (
-      <h1>{props.name}</h1>
-    ) 
-  }
-  
-const Part = (props) => {
-return (
-    <p>{props.part.name} {props.part.exercises}</p>
-)
-}
-  
-const Content = (props) => {
-return (
-    <div>
-    <Part part={ props.parts[0] } />
-    <Part part={ props.parts[1] } />
-    <Part part={ props.parts[2] } />
-    </div>
-)
-}
-  
-const Total = (props) => {
-return (
-    <h4>Total of {props.parts.reduce((acc, part) => acc + part.exercises, 0)} exercises
-    </h4>
-)
-}
+const Header = (props) => <h1>{props.name}</h1>
 
-const Course = ( {course} ) => {
+const Part = ( { part }) => <p>{part.name} {part.exercises}</p>
+
+const Content = ( { parts }) => <div>{parts.map(
+    (part) => <Part part={part} key={part.id}/>)}</div>
+
+const Total = (props) => <h4>Total of {props.parts.reduce(
+    (acc, part) => acc + part.exercises, 0)} exercises</h4>
+
+const Course = ( {courses} ) => {
     return (
-        <div>
-          <Header name={course.name} />
-          <Content parts={course.parts} />
-          <Total parts={course.parts} />
-        </div>
+        <ul>
+            {courses.map((course) => <li key={course.id}>
+                <Header name={course.name} />
+                <Content parts={course.parts} />
+                <Total parts={course.parts} />
+            </li>)}
+        </ul>
     )
 }
 
