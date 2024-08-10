@@ -11,6 +11,13 @@ const App = () => {
     const newPerson = {
         name: newName,
     }
+    const repeatedName = persons.find((person) => JSON.stringify(
+        person) === JSON.stringify(newPerson))
+
+    if (repeatedName) {
+        alert(`${newPerson.name} is already added to phonebook`)
+        return 
+    }
     setPersons([...persons, newPerson])
     setNewName('')
   }
