@@ -17,14 +17,14 @@ const deletePerson = (id) => {
     return request.then(response => response.data)
 }
 
-// const update = (id, newPerson) => {
-//     const request = axios.put(`${baseUrl}/${id}`, newPerson)
-//     return request.then(response => response.data)
-// }
+const updatePerson = (id, newPerson) => {
+    const request = axios.put(`${baseUrl}/${id}`, newPerson)
+    return request.then(response => response.data)
+}
 
 export { 
     getAllPersons, 
     createPerson,
     deletePerson,
-    // update 
+    updatePerson 
 }
