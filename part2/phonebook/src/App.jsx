@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getAll, create } from '../services/services';
+import { getAllPersons, createPerson, deletePerson } from '../services/services';
 
 const Filter = ({ filterProps }) => {
     const [filterContact, setFilterContact] = filterProps
@@ -37,13 +37,14 @@ const PersonForm = ({ formProps }) => {
 	);
 };
 
-const Persons = ({ persons }) => {
+const Persons = ({ persons, onDeletePerson }) => {
 	// console.log('filtered Persons: ', persons);
 	return (
 		<ul>
 			{persons.map((person) => (
 				<li key={person.name}>
 					{person.name} {person.number}
+					<button onClick={() => onDeletePerson(person.id)}>Delete</button>
 				</li>
 			))}
 		</ul>
@@ -60,9 +61,8 @@ const App = () => {
 
 	useEffect(()=> {
 		// console.log('Effect')
-		getAll()
+		getAllPersons()
 		.then(contacts => {
-			console.log(contacts)
 			setPersons(contacts)
 		})
 	}, [])
@@ -83,7 +83,7 @@ const App = () => {
 		}
 
 		// método para añadir el nuevo contacto al servidor en el fichero 'db.json'
-		create(newPerson)
+		createPerson(newPerson)
 		.then(newPerson => {
 			console.log('this contact has been added', newPerson)
 			setPersons([...persons, newPerson]);
@@ -95,6 +95,18 @@ const App = () => {
 	const filteredPersons = persons.filter((person) =>
 		person.name.toLowerCase().includes(filterContact.toLowerCase())
 	);
+
+	const handleDeletePerson = (id) => {
+		if (window.confirm("Do you really want to delete this contact?")) {
+			console.log(`deleting person with id ${id}`)
+	
+			deletePerson(id)
+			.then(deletedPerson => {
+				console.log(deletedPerson)
+				setPersons(persons.filter(person => person.id !== id))
+			})
+		  }
+	}
 
 	return (
 		<div>
@@ -112,7 +124,7 @@ const App = () => {
 				]}
 			/>
 			<h3>Numbers</h3>
-			<Persons persons={filteredPersons} />
+			<Persons persons={filteredPersons} onDeletePerson={handleDeletePerson} />
 		</div>
 	);
 };
