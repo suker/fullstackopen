@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { getAll, create } from '../services/services';
 
 const Filter = ({ filterProps }) => {
     const [filterContact, setFilterContact] = filterProps
@@ -60,11 +60,10 @@ const App = () => {
 
 	useEffect(()=> {
 		// console.log('Effect')
-		axios
-		.get(baseUrl)
-		.then(resp => {
-			// console.log(resp)
-			setPersons(resp.data)
+		getAll()
+		.then(contacts => {
+			console.log(contacts)
+			setPersons(contacts)
 		})
 	}, [])
 
@@ -84,12 +83,12 @@ const App = () => {
 		}
 
 		// método para añadir el nuevo contacto al servidor en el fichero 'db.json'
-		axios.post(baseUrl, newPerson)
-		.then(response => {
-			console.log('this contact has been added', response.data)
+		create(newPerson)
+		.then(newPerson => {
+			console.log('this contact has been added', newPerson)
 			setPersons([...persons, newPerson]);
 			setNewName('');
-			setNewNumber('');
+			setNewNumber('');			
 		})
 	};
 
