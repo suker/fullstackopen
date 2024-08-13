@@ -50,6 +50,8 @@ const Persons = ({ persons }) => {
 	);
 };
 
+const baseUrl = 'http://localhost:3001/persons'
+
 const App = () => {
     const [persons, setPersons] = useState([])
 	const [newName, setNewName] = useState('');
@@ -57,11 +59,11 @@ const App = () => {
 	const [filterContact, setFilterContact] = useState('');
 
 	useEffect(()=> {
-		console.log('Effect')
+		// console.log('Effect')
 		axios
-		.get('http://localhost:3001/persons')
+		.get(baseUrl)
 		.then(resp => {
-			console.log(resp)
+			// console.log(resp)
 			setPersons(resp.data)
 		})
 	}, [])
@@ -80,9 +82,15 @@ const App = () => {
 			alert(`${newPerson.name} is already added to phonebook`);
 			return;
 		}
-		setPersons([...persons, newPerson]);
-		setNewName('');
-		setNewNumber('');
+
+		// método para añadir el nuevo contacto al servidor en el fichero 'db.json'
+		axios.post(baseUrl, newPerson)
+		.then(response => {
+			console.log('this contact has been added', response.data)
+			setPersons([...persons, newPerson]);
+			setNewName('');
+			setNewNumber('');
+		})
 	};
 
 	const filteredPersons = persons.filter((person) =>
