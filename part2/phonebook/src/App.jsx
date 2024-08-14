@@ -51,7 +51,11 @@ const App = () => {
 						);
 						displayNotification(`${newName} number has changed to ${updatedPerson.number}`)
 					}
-				);
+				)
+				.catch(() => {
+					displayNotification(`Information of ${repeatedContact.name} has already been removed from server`)
+					setPersons(persons.filter(person => person.id !== repeatedContact.id))
+				})
 			}
 		} else {
 			// método para añadir el nuevo contacto al servidor en el fichero 'db.json'
