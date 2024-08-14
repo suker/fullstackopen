@@ -5,73 +5,10 @@ import {
 	deletePerson,
 	updatePerson,
 } from '../services/services';
-
-const Notification = ({ msg }) => {
-
-	const message_styles = {
-		fontSize: 20,
-		padding: 8,
-		border: '3px solid green',
-		backgroundColor: '#d8d6d6',
-		color: 'green',
-		fontWeight: 'bold'
-	}
-
-	if (!msg) return 
-
-	return (<p style={message_styles}>{msg}</p>)
-}
-
-const Filter = ({ filterProps }) => {
-	const [filterContact, setFilterContact] = filterProps;
-	return (
-		<input
-			value={filterContact}
-			onChange={(e) => setFilterContact(e.target.value)}
-		/>
-	);
-};
-
-const PersonForm = ({ formProps }) => {
-	const [addContact, newName, setNewName, newNumber, setNewNumber] =
-		formProps;
-	return (
-		<form onSubmit={addContact}>
-			<div>
-				name:{' '}
-				<input
-					value={newName}
-					onChange={(e) => setNewName(e.target.value)}
-				/>
-			</div>
-			<div>
-				number:{' '}
-				<input
-					value={newNumber}
-					onChange={(e) => setNewNumber(e.target.value)}
-				/>
-			</div>
-			<div>
-				<button type="submit">add</button>
-			</div>
-		</form>
-	);
-};
-
-const Persons = ({ persons, onDeletePerson }) => {
-	return (
-		<ul>
-			{persons.map((person) => (
-				<li key={person.name}>
-					{person.name} {person.number}
-					<button onClick={() => onDeletePerson(person.id)}>
-						Delete
-					</button>
-				</li>
-			))}
-		</ul>
-	);
-};
+import Notification from './components/Notification';
+import Filter from './components/Filter';
+import PersonForm from './components/PersonForm';
+import Persons from './components/Persons';
 
 const App = () => {
 	const [persons, setPersons] = useState([]);
