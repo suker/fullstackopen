@@ -6,6 +6,22 @@ import {
 	updatePerson,
 } from '../services/services';
 
+const Notification = ({ msg }) => {
+
+	const message_styles = {
+		fontSize: 20,
+		padding: 8,
+		border: '3px solid green',
+		backgroundColor: '#d8d6d6',
+		color: 'green',
+		fontWeight: 'bold'
+	}
+
+	if (!msg) return 
+
+	return (<p style={message_styles}>{msg}</p>)
+}
+
 const Filter = ({ filterProps }) => {
 	const [filterContact, setFilterContact] = filterProps;
 	return (
@@ -62,6 +78,7 @@ const App = () => {
 	const [newName, setNewName] = useState('');
 	const [newNumber, setNewNumber] = useState('');
 	const [filterContact, setFilterContact] = useState('');
+	const [message, setMessage] = useState(null)
 
 	useEffect(() => {
 		getAllPersons().then((contacts) => {
@@ -95,6 +112,7 @@ const App = () => {
 									: person
 							)
 						);
+						displayNotification(`${newName} number has changed to ${updatedPerson.number}`)
 					}
 				);
 			}
@@ -103,11 +121,19 @@ const App = () => {
 			createPerson(newPerson).then((newPerson) => {
 				// console.log('this contact has been added', newPerson);
 				setPersons([...persons, newPerson]);
+				displayNotification(`Added ${newName}`)
 			});
 		}
 		setNewName('');
 		setNewNumber('');
 	};
+
+	const displayNotification = (msg) => {
+		setMessage(msg)
+		setTimeout(() => {
+			setMessage(null)
+		}, 2000)
+	}
 
 	const filteredPersons = persons.filter((person) =>
 		person.name.toLowerCase().includes(filterContact.toLowerCase())
@@ -127,6 +153,7 @@ const App = () => {
 	return (
 		<div>
 			<h2>Phonebook</h2>
+			<Notification msg={message}/>
 			Filter shown with
 			<Filter filterProps={[filterContact, setFilterContact]} />
 			<h2>Add a new contact</h2>
