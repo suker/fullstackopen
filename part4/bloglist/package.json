@@ -1,0 +1,22 @@
+{
+  "name": "bloglist",
+  "version": "1.0.0",
+  "description": "Blog list App for fullstackopen",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test",
+    "dev": "nodemon --inspect=7000 index.js"
+  },
+  "author": "Suk3r",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.20.0",
+    "mongoose": "^8.6.1",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
