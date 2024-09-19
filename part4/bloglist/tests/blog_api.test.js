@@ -60,7 +60,7 @@ test('new blog is created in db', async () => {
 
 // STEP 4
 
-test.only('default value of 0 on noexisting likes property', async () => {
+test('likes property exists on creating new blog', async () => {
     const newBlog = {
         title: 'The lord of the rings',
         author: 'J.R.R. Tolkien',
@@ -75,6 +75,28 @@ test.only('default value of 0 on noexisting likes property', async () => {
     const blogs = await helper.getBlogListDB()
     const blog = blogs.filter(blog => blog.title  === 'The lord of the rings')
     assert.equal(blog[0].likes, 0)
+})
+
+test('title property exists on creating new blog', async () => {
+    const newBlog = {
+        author: 'J.R.R. Tolkien',
+        url: 'https://es.wikipedia.org/wiki/El_Se%C3%B1or_de_los_Anillos',
+    }
+
+    await api.post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+})
+
+test('url property exists on creating new blog', async () => {
+    const newBlog = {
+        title: 'The lord of the rings',
+        author: 'J.R.R. Tolkien',
+    }
+
+    await api.post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
 })
 
 after(async () => {
