@@ -38,6 +38,26 @@ test('Verifies that the unique identifier property of the bloglist is named id',
     assert.equal(blogs.every(blog => blog._id), false)
 });
 
+// STEP 3
+
+test('new blog is created in db', async () => {
+    const newBlog = {
+        title: 'The lord of the rings',
+        author: 'J.R.R. Tolkien',
+        url: 'https://es.wikipedia.org/wiki/El_Se%C3%B1or_de_los_Anillos',
+        likes: '4'
+    }
+
+    await api.post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('content-type', /application\/json/)
+
+    const blogs = await helper.getBlogListDB()
+    assert.strictEqual(blogs.length, helper.initialBlogs.length + 1)
+    assert(blogs.map(blog => blog.title).includes('The lord of the rings'))
+})
+
 after(async () => {
 	await mongoose.connection.close();
 });
