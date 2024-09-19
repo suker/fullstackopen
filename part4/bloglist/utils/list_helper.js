@@ -1,3 +1,5 @@
+// TESTING METHODS 
+
 const dummy = (blogs) => {
 	// blogs ->  array
 	return 1;

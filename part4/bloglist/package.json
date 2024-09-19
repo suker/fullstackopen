@@ -4,8 +4,9 @@
   "description": "Blog list App for fullstackopen",
   "main": "index.js",
   "scripts": {
-    "test": "node --test",
-    "dev": "nodemon --inspect=7000 index.js"
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development nodemon --inspect=7000 index.js",
+    "test": "cross-env NODE_ENV=test node --test"
   },
   "author": "Suk3r",
   "license": "MIT",
@@ -17,6 +18,8 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.4"
+    "cross-env": "^7.0.3",
+    "nodemon": "^3.1.4",
+    "supertest": "^7.0.0"
   }
 }
