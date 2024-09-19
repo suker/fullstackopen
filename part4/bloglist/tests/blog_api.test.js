@@ -15,6 +15,8 @@ beforeEach(async () => {
 	await Promise.all(promiseArray);
 });
 
+// STEP 1
+
 test('blogs are returned in JSON', async () => {
 	await api
 		.get('/api/blogs')
@@ -24,8 +26,16 @@ test('blogs are returned in JSON', async () => {
 
 test('there are initialBlogs created', async () => {
 	const blogs = await helper.getBlogListDB();
-
 	assert.strictEqual(blogs.length, helper.initialBlogs.length);
+});
+
+// STEP 2
+
+test('Verifies that the unique identifier property of the bloglist is named id', async () => {
+    const blogs = await helper.getBlogListDB()
+    let hasIdProperty = blogs.every(blog => blog.id)
+    assert.equal(hasIdProperty, true)
+    assert.equal(blogs.every(blog => blog._id), false)
 });
 
 after(async () => {
