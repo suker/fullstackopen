@@ -107,17 +107,41 @@ describe('When there are initial blogs created', () => {
 		});
 	});
 
-    describe('When blogs are deleted', () => {
-        test('succeeds with status code 204 if id is valid', async () => {
-            const validBlog = (await helper.getBlogListDB())[0]
-            await api.delete(`/api/blogs/${validBlog.id}`).expect(204)
-        })
+	describe('When blogs are deleted', () => {
+		test('succeeds with status code 204 if id is valid', async () => {
+			const validBlog = (await helper.getBlogListDB())[0];
+			await api.delete(`/api/blogs/${validBlog.id}`).expect(204);
+		});
 
-        test('fails with status code 400 if id is invalid', async () => {
-            const invalidBlogId = '66ed2f3d81b6be7cae94da0'
-            await api.delete(`/api/blogs/${invalidBlogId}`).expect(400)
-        })
-    })
+		test('fails with status code 400 if id is invalid', async () => {
+			const invalidBlogId = '66ed2f3d81b6be7cae94da0';
+			await api.delete(`/api/blogs/${invalidBlogId}`).expect(400);
+		});
+	});
+
+	describe('When blogs are updated', () => {
+		test('succeeds with 200 updating a blog post', async () => {
+			const validBlog = (await helper.getBlogListDB())[0];
+			const updateBlog = { ...validBlog, title: 'Harry Potter #1' };
+			await api
+				.put(`/api/blogs/${validBlog.id}`)
+				.send(updateBlog)
+				.expect(200);
+
+			const blogs = await helper.getBlogListDB();
+			assert.strictEqual(blogs[0].title, updateBlog.title);
+		});
+
+		test('fails with status code 400 if id is invalid', async () => {
+			const validBlog = (await helper.getBlogListDB())[0];
+			const updateBlog = { ...validBlog, title: 'Harry Potter #1' };
+			const invalidBlogId = '66ed2f3d81b6be7cae94da0';
+			await api
+				.put(`/api/blogs/${invalidBlogId}`)
+				.send(updateBlog)
+				.expect(400);
+		});
+	});
 });
 
 after(async () => {
