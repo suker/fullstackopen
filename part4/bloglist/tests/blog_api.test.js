@@ -120,16 +120,16 @@ describe('When there are initial blogs created', () => {
 	});
 
 	describe('When blogs are updated', () => {
-		test('succeeds with 200 updating a blog post', async () => {
+		test('succeeds with 200 updating likes of a blog', async () => {
 			const validBlog = (await helper.getBlogListDB())[0];
-			const updateBlog = { ...validBlog, title: 'Harry Potter #1' };
+			const updateBlog = { ...validBlog, likes: 12 };
 			await api
 				.put(`/api/blogs/${validBlog.id}`)
 				.send(updateBlog)
 				.expect(200);
 
 			const blogs = await helper.getBlogListDB();
-			assert.strictEqual(blogs[0].title, updateBlog.title);
+			assert.strictEqual(blogs[0].likes, updateBlog.likes);
 		});
 
 		test('fails with status code 400 if id is invalid', async () => {
