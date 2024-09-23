@@ -3,8 +3,8 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOiI2NmYxNmRmM2M5NDhiNTAzZGUwMDYxNjMiLCJpYXQiOjE3MjcxMDEzNDF9.Gh-tZLxyVuEz2fBbr2ISWHa_IcBuQqUiSPhbwoJclN4
 
 {
-    "title": "New blog #44",
+    "title": "New blog #43",
     "author": "J.K Kennedy",
     "url": "www.kennedy.co",
-    "likes": 10
+    "likes": 15
 }
