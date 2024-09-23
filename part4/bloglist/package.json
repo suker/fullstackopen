@@ -6,7 +6,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node index.js",
     "dev": "cross-env NODE_ENV=development nodemon --inspect=7000 index.js",
-    "test": "cross-env NODE_ENV=test node --test"
+    "test": "cross-env NODE_ENV=test node --test --test-concurrency=1"
   },
   "author": "Suk3r",
   "license": "MIT",

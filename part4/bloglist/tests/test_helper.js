@@ -1,4 +1,5 @@
 const Blog = require('../models/blog');
+const User = require('../models/user');
 
 const initialBlogs = [
 	{
@@ -12,6 +13,19 @@ const initialBlogs = [
 		author: 'Gore Verbinski',
 		url: 'https://es.wikipedia.org/wiki/Piratas_del_Caribe',
 		likes: '7',
+	},
+];
+
+const initialUsers = [
+	{
+		name: 'Juanito',
+		username: 'juan',
+		password: 'carlos',
+	},
+	{
+		name: 'Pepito',
+		username: 'pepito',
+		password: 'grillo',
 	},
 ];
 
@@ -30,7 +44,18 @@ const nonExistingId = async () => {
 
 const getBlogListDB = async () => {
 	const blogs = await Blog.find({});
-	return blogs.map((note) => note.toJSON());
+	return blogs.map((blog) => blog.toJSON());
 };
 
-module.exports = { initialBlogs, nonExistingId, getBlogListDB };
+const usersInDb = async () => {
+	const users = await User.find({});
+	return users.map((user) => user.toJSON());
+};
+
+module.exports = {
+	initialBlogs,
+	initialUsers,
+	nonExistingId,
+	getBlogListDB,
+	usersInDb,
+};
