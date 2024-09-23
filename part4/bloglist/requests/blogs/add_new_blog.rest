@@ -1,6 +1,6 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOiI2NmYxNmRmM2M5NDhiNTAzZGUwMDYxNjMiLCJpYXQiOjE3MjcwOTg4NjF9.d36PdYE53lxq7tSXg65pDXSy0SQpKjg2civuruWkouw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOiI2NmYxNmRmM2M5NDhiNTAzZGUwMDYxNjMiLCJpYXQiOjE3MjcxMDEzNDF9.Gh-tZLxyVuEz2fBbr2ISWHa_IcBuQqUiSPhbwoJclN4
 
 {
     "title": "New blog #44",
