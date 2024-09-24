@@ -1,9 +1,9 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOiI2NmYxNmRmM2M5NDhiNTAzZGUwMDYxNjMiLCJpYXQiOjE3MjcxMDEzNDF9.Gh-tZLxyVuEz2fBbr2ISWHa_IcBuQqUiSPhbwoJclN4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluMSIsImlkIjoiNjZmMTljZDY1NDMwYTAzYTg5YjI2Y2U1IiwiaWF0IjoxNzI3MTczNDIwfQ.VJk2cnTHb5lSg8SyFxeYfcKIrWd0ir4mIx0oqXM01aU
 
 {
-    "title": "New blog #43",
+    "title": "New blog #44",
     "author": "J.K Kennedy",
     "url": "www.kennedy.co",
     "likes": 15

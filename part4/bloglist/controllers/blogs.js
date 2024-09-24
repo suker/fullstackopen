@@ -3,14 +3,6 @@ const Blog = require('../models/blog');
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 
-// const getTokenFrom = (request) => {
-// 	const authorization = request.get('authorization');
-// 	if (authorization && authorization.startsWith('Bearer ')) {
-// 		return authorization.replace('Bearer ', '');
-// 	}
-// 	return null;
-// };
-
 blogsRouter.get('/', async (request, response) => {
 	const blogs = await Blog.find({}).populate('user', ['username', 'name']);
 	response.json(blogs);
@@ -18,12 +10,7 @@ blogsRouter.get('/', async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
 	const body = request.body;
-
-	const decodedToken = jwt.verify(request.token, process.env.SECRET);
-	if (!decodedToken.id) {
-		return response.status(401).json({ error: 'token invalid' });
-	}
-	const user = await User.findById(decodedToken.id);
+	const user = request.user;
 
 	if (!body.title || !body.url) {
 		return response.status(400).json({
@@ -66,27 +53,25 @@ blogsRouter.put('/:id', async (request, response) => {
 });
 
 blogsRouter.delete('/:id', async (request, response) => {
-	const decodedToken = jwt.verify(request.token, process.env.SECRET);
-	if (!decodedToken.id) {
-		return response.status(401).json({ error: 'token invalid' });
-	}
-	const user = await User.findById(decodedToken.id);
-	const blog_id = request.params.id
-	if ((await canUserDeleteBlog(user, blog_id)) === false) {
+	const user = request.user;
+	const blog = await Blog.findById(request.params.id);
+	if (isInvalidBlog(user, blog)) {
 		return response
 			.status(401)
 			.json({ error: 'blog must belong to user who created it' });
 	}
-	await Blog.findByIdAndDelete(blog_id);
+	await Blog.findByIdAndDelete(request.params.id);
 	response.status(204).send();
 });
 
-module.exports = blogsRouter;
-
-const canUserDeleteBlog = async (user, blog_id) => {
-	const blog = await Blog.findById(blog_id)
-	if (blog.user === undefined || blog.user.toString() === user.id.toString()) {
-		return true
+const isInvalidBlog = (user, blog) => {
+	if (
+		blog.user === undefined ||
+		blog.user.toString() === user.id.toString()
+	) {
+		return false;
 	}
-		return false
-}
+	return true;
+};
+
+module.exports = blogsRouter;
