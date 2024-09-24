@@ -52,10 +52,24 @@ const usersInDb = async () => {
 	return users.map((user) => user.toJSON());
 };
 
+const getJtw = async ( agent, { username, password }) => {
+	const response = await agent
+	.post('/api/login')
+	.send({
+		username: 'juan',
+		password: 'carlos',
+	})
+	.expect(200)
+	.expect('content-type', /application\/json/)
+
+	return response.body?.token
+}
+
 module.exports = {
 	initialBlogs,
 	initialUsers,
 	nonExistingId,
 	getBlogListDB,
 	usersInDb,
+	getJtw
 };
