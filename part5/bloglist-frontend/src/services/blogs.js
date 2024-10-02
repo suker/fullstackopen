@@ -29,11 +29,11 @@ const update = async (data, token) => {
 };
 
 const deleteBlog = async (data, token) => {
-  const headers = {
+	const headers = {
 		'Content-type': 'application/json',
 		Authorization: `Bearer ${token}`,
 	};
-  await axios.delete(`${baseUrl}/${data.id}`, { headers })
-}
+	await axios.delete(`${baseUrl}/${data.id}`, { headers });
+};
 
 export default { getAll, create, update, deleteBlog };

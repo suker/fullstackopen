@@ -44,7 +44,7 @@ const Blog = ({ blog, blogs, setBlogs, user, setMessage }) => {
 
 		try {
 			await blogservices.deleteBlog(blog, user.token);
-			setBlogs(blogs.map((b) => (b.id !== blog.id ? blog : {})));
+			setBlogs(blogs.filter((b) => b.id !== blog.id));
 		} catch (exception) {
 			console.log('exception on handleDelete', exception);
 		}
@@ -69,7 +69,7 @@ const Blog = ({ blog, blogs, setBlogs, user, setMessage }) => {
 				<Button
 					onClick={handleLike}
 					label="👍"
-					style={{borderWidth: 0}}
+					style={{ borderWidth: 0 }}
 				/>
 			</div>
 			<p>
@@ -83,7 +83,11 @@ const Blog = ({ blog, blogs, setBlogs, user, setMessage }) => {
 			<Button
 				onClick={handleDelete}
 				label="delete"
-				style={{ backgroundColor: '#ff5d3a', marginBottom: 4, borderWidth: 0}}
+				style={{
+					backgroundColor: '#ff5d3a',
+					marginBottom: 4,
+					borderWidth: 0,
+				}}
 			/>
 		</li>
 	);

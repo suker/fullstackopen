@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Blog from './components/Blog';
 import Notification from './components/Notification';
 import Togglable from './components/Togglable';
@@ -7,33 +7,45 @@ import blogService from './services/blogs';
 import axios from 'axios';
 
 const App = () => {
-
 	const [blogs, setBlogs] = useState([]);
 	const [user, setUser] = useState(null);
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [message, setMessage] = useState('');
 
+	const blogFormRef = useRef();
+
+	useEffect(() => {
+		fetchBlogs();
+
+		if (!user) {
+			const storageUser = JSON.parse(
+				window.localStorage.getItem('bloglistAuthUser')
+			);
+			console.log('storageUser', storageUser);
+			setUser(storageUser);
+		}
+	}, []);
+
 	const cleanLoginInputs = () => {
 		setUsername('');
 		setPassword('');
 	};
 
-	function compare( a, b ) {
-		if ( a.likes > b.likes ){
-		  return -1;
+	function compare(a, b) {
+		if (a.likes > b.likes) {
+			return -1;
 		}
-		if ( a.likes < b.likes ){
-		  return 1;
+		if (a.likes < b.likes) {
+			return 1;
 		}
 		return 0;
-	  }
-	  
+	}
 
 	const fetchBlogs = async () => {
 		try {
 			const blogs = await blogService.getAll();
-			blogs.sort( compare )
+			blogs.sort(compare);
 			setBlogs(blogs);
 		} catch (exception) {
 			console.log('Error on retrieving blogs from DB');
@@ -47,18 +59,6 @@ const App = () => {
 			setMessage('');
 		}, 4000);
 	};
-
-	useEffect(() => {
-		fetchBlogs();
-
-		if (!user) {
-			const storageUser = JSON.parse(
-				window.localStorage.getItem('bloglistAuthUser')
-			);
-			console.log('storageUser', storageUser);
-			setUser(storageUser);
-		}
-	}, []);
 
 	const handleLogin = async (ev) => {
 		ev.preventDefault();
@@ -92,11 +92,13 @@ const App = () => {
 
 	const addBlog = async (blogObject) => {
 		try {
+			blogFormRef.current.toggleVisibility();
 			const newBlog = await blogService.create(blogObject, user.token);
 			console.log('newBlog after creation:', newBlog);
 			setBlogs([...blogs, newBlog]);
 			displayMessage(`a new blog "${newBlog.title}" has been added!`);
 		} catch (exception) {
+			console.log(exception);
 			displayMessage(exception.response.data.error);
 		}
 	};
@@ -157,6 +159,7 @@ const App = () => {
 			<Togglable
 				buttonLabel="Create a new blog"
 				style={{ marginBottom: 30 }}
+				ref={blogFormRef}
 			>
 				<section className="new-blogs">
 					<BlogForm addBlog={addBlog} />

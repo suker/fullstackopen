@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 const BlogForm = ({ addBlog }) => {
 	const defaultBlogValues = {
@@ -16,14 +16,12 @@ const BlogForm = ({ addBlog }) => {
 
 	const handleAddBlog = (ev) => {
 		ev.preventDefault();
-		addBlog(blog)
+		addBlog(blog);
 		setBlog(defaultBlogValues);
-	}
+	};
 
 	return (
-		<form
-			onSubmit={handleAddBlog}
-		>
+		<form onSubmit={handleAddBlog}>
 			<span>Title:</span>
 			<input
 				type="text"
