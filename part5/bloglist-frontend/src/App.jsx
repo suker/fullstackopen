@@ -11,7 +11,7 @@ const App = () => {
 	const [user, setUser] = useState(null);
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
-	const [message, setMessage] = useState('');
+	const [message, setMessage] = useState();
 
 	const blogFormRef = useRef();
 
@@ -52,8 +52,8 @@ const App = () => {
 		}
 	};
 
-	const displayMessage = (msg) => {
-		setMessage(msg);
+	const displayMessage = (text, type) => {
+		setMessage({ text, type });
 
 		setTimeout(() => {
 			setMessage('');
@@ -64,7 +64,7 @@ const App = () => {
 		ev.preventDefault();
 		// console.log('handleLogin..');
 		if (!username || !password) {
-			displayMessage('Insert username and password');
+			displayMessage('Insert username and password', 'error');
 			return;
 		}
 		try {
@@ -79,7 +79,7 @@ const App = () => {
 				JSON.stringify(response.data)
 			);
 		} catch (exception) {
-			displayMessage(exception.response.data.error);
+			displayMessage(exception.response.data.error, 'error');
 		}
 		cleanLoginInputs();
 	};
@@ -96,10 +96,53 @@ const App = () => {
 			const newBlog = await blogService.create(blogObject, user.token);
 			console.log('newBlog after creation:', newBlog);
 			setBlogs([...blogs, newBlog]);
-			displayMessage(`a new blog "${newBlog.title}" has been added!`);
+			displayMessage(
+				`a new blog "${newBlog.title}" has been added!`,
+				'sucess'
+			);
 		} catch (exception) {
 			console.log(exception);
-			displayMessage(exception.response.data.error);
+			displayMessage(exception.response.data.error, 'error');
+		}
+	};
+	// Add likes
+	const updateBlog = async (blog) => {
+		try {
+			await blogService.update(blog.id, blog);
+			const blogs = await blogService.getAll();
+			setBlogs(blogs.sort((a, b) => b.likes - a.likes));
+			displayMessage(
+				`blog titled ${blog.title} by ${blog.author} liked`,
+				'success'
+			);
+		} catch (err) {
+			console.log(err);
+			displayMessage(
+				`Liking blog titled ${blog.title} by ${blog.author} failed.`,
+				'error'
+			);
+		}
+	};
+
+	const deleteBlog = async (id, blog) => {
+		try {
+			if (
+				window.confirm(`Remove blog "${blog.title}" by ${blog.author}?`)
+			) {
+				await blogService.deleteBlog(id);
+				const response = await blogService.getAll();
+				setBlogs(response);
+				displayMessage(
+					`blog titled ${blog.title} by ${blog.author} deleted`,
+					'success'
+				);
+			}
+		} catch (err) {
+			console.log(err);
+			displayMessage(
+				`Deleting blog titled ${blog.title} by ${blog.author} failed.`,
+				'error'
+			);
 		}
 	};
 
@@ -170,11 +213,12 @@ const App = () => {
 				{blogs.map((blog) => (
 					<Blog
 						key={blog.id}
-						blog={blog}
-						blogs={blogs}
-						setBlogs={setBlogs}
-						user={user}
-						setMessage={setMessage}
+						{...{
+							blog,
+							deleteBlog,
+							updateBlog,
+							username: user.username,
+						}}
 					/>
 				))}
 			</ul>
