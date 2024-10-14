@@ -1,6 +1,6 @@
 const blogsRouter = require('express').Router();
 const Blog = require('../models/blog');
-const middleware = require('../utils/middleware')
+const middleware = require('../utils/middleware');
 
 blogsRouter.get('/', async (request, response) => {
 	const blogs = await Blog.find({}).populate('user', ['username', 'name']);
@@ -51,17 +51,21 @@ blogsRouter.put('/:id', async (request, response) => {
 	response.json(updatedBlog);
 });
 
-blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
-	const user = request.user;
-	const blog = await Blog.findById(request.params.id);
-	if (isInvalidBlog(user, blog)) {
-		return response
-			.status(401)
-			.json({ error: 'blog must belong to user who created it' });
+blogsRouter.delete(
+	'/:id',
+	middleware.userExtractor,
+	async (request, response) => {
+		const user = request.user;
+		const blog = await Blog.findById(request.params.id);
+		if (isInvalidBlog(user, blog)) {
+			return response
+				.status(401)
+				.json({ error: 'blog must belong to user who created it' });
+		}
+		await Blog.findByIdAndDelete(request.params.id);
+		response.status(204).send();
 	}
-	await Blog.findByIdAndDelete(request.params.id);
-	response.status(204).send();
-});
+);
 
 const isInvalidBlog = (user, blog) => {
 	if (

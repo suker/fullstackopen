@@ -1,9 +1,10 @@
-PUT http://localhost:3003/api/blogs/66ed2f3d81b6be7cae94da0f
+PUT http://localhost:3003/api/blogs/66fbeb49da4ef91326a3332c
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluMSIsImlkIjoiNjZmMTljZDY1NDMwYTAzYTg5YjI2Y2U1IiwiaWF0IjoxNzI3NzkxMjc0fQ.TRBZOs6fRaV2fFAu6uhP_4oJivi1bkU3DCtGsihvT54
 
 {
-    "title": "New blog #1",
-    "author": "Patrick",
+    "title": "hola",
+    "author": "como estas",
     "url": "www.patrickrouthfus.com",
-    "likes": 2
+    "likes": 6
 }
