@@ -62,7 +62,6 @@ const App = () => {
 
 	const handleLogin = async (ev) => {
 		ev.preventDefault();
-		// console.log('handleLogin..');
 		if (!username || !password) {
 			displayMessage('Insert username and password', 'error');
 			return;
@@ -108,7 +107,7 @@ const App = () => {
 	// Add likes
 	const updateBlog = async (blog) => {
 		try {
-			await blogService.update(blog.id, blog);
+			await blogService.update(blog);
 			const blogs = await blogService.getAll();
 			setBlogs(blogs.sort((a, b) => b.likes - a.likes));
 			displayMessage(
@@ -129,7 +128,7 @@ const App = () => {
 			if (
 				window.confirm(`Remove blog "${blog.title}" by ${blog.author}?`)
 			) {
-				await blogService.deleteBlog(id);
+				await blogService.deleteBlog(id, user.token);
 				const response = await blogService.getAll();
 				setBlogs(response);
 				displayMessage(
@@ -169,7 +168,12 @@ const App = () => {
 					}}
 				/>
 				<br />
-				<button type="submit">Logearse!</button>
+				<button
+					className="form-submit"
+					type="submit"
+				>
+					🔒 Login
+				</button>
 			</form>
 		);
 	};
@@ -178,12 +182,7 @@ const App = () => {
 		return (
 			<div>
 				<h1>🔅 Log in to application 🔅</h1>
-				{message && (
-					<Notification
-						msg={message}
-						error="true"
-					/>
-				)}
+				{message?.text && <Notification msg={message} />}
 				{loginForm()}
 			</div>
 		);
@@ -208,20 +207,22 @@ const App = () => {
 					<BlogForm addBlog={addBlog} />
 				</section>
 			</Togglable>
-			<h3>Blogs list</h3>
-			<ul style={{ listStyle: 'none', padding: 0 }}>
-				{blogs.map((blog) => (
-					<Blog
-						key={blog.id}
-						{...{
-							blog,
-							deleteBlog,
-							updateBlog,
-							username: user.username,
-						}}
-					/>
-				))}
-			</ul>
+			<div className="bloglist">
+				<h3>Blogs list</h3>
+				<ul style={{ listStyle: 'none', padding: 0 }}>
+					{blogs.map((blog) => (
+						<Blog
+							key={blog.id}
+							{...{
+								blog,
+								deleteBlog,
+								updateBlog,
+								username: user.username,
+							}}
+						/>
+					))}
+				</ul>
+			</div>
 		</div>
 	);
 };

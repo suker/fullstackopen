@@ -21,9 +21,13 @@ const BlogForm = ({ addBlog }) => {
 	};
 
 	return (
-		<form onSubmit={handleAddBlog} className='blog-form'>
+		<form
+			onSubmit={handleAddBlog}
+			className="blog-form"
+		>
 			<span>Title:</span>
 			<input
+				data-testid="title"
 				type="text"
 				value={blog.title}
 				onChange={(title) => handleInputs(title, 'title')}
@@ -31,6 +35,7 @@ const BlogForm = ({ addBlog }) => {
 			<br />
 			<span>Author:</span>
 			<input
+				data-testid="author"
 				type="text"
 				value={blog.author}
 				onChange={(author) => handleInputs(author, 'author')}
@@ -38,12 +43,13 @@ const BlogForm = ({ addBlog }) => {
 			<br />
 			<span>Url:</span>
 			<input
+				data-testid="url"
 				type="url"
 				value={blog.url}
 				onChange={(url) => handleInputs(url, 'url')}
 			/>
 			<br />
-			<button type="submit">Save</button>
+			<button data-testid="create-blog" type="submit">Save</button>
 		</form>
 	);
 };

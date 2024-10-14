@@ -16,24 +16,17 @@ const create = async (data, token) => {
 	return response.data;
 };
 
-const update = async (data, token) => {
-	const headers = {
-		'Content-type': 'application/json',
-		Authorization: `Bearer ${token}`,
-	};
-
-	const response = await axios.put(`${baseUrl}/${data.id}`, data, {
-		headers,
-	});
+const update = async (data) => {
+	const response = await axios.put(`${baseUrl}/${data.id}`, data);
 	return response.data;
 };
 
-const deleteBlog = async (data, token) => {
+const deleteBlog = async (id, token) => {
 	const headers = {
 		'Content-type': 'application/json',
 		Authorization: `Bearer ${token}`,
 	};
-	await axios.delete(`${baseUrl}/${data.id}`, { headers });
+	await axios.delete(`${baseUrl}/${id}`, { headers });
 };
 
 export default { getAll, create, update, deleteBlog };

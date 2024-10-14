@@ -1,20 +1,20 @@
-const Notification = ({ message }) => {
+const Notification = ({ msg }) => {
 	const messageStyle = {
 		borderStyle: 'solid',
-		borderColor: !message
+		borderColor: !msg
 			? null
-			: message.type === 'error'
+			: msg.type === 'error'
 				? '#ec5353'
 				: '#109010',
 		borderWidth: 2,
-		color: !message
+		color: !msg
 			? null
-			: message.type === 'error'
+			: msg.type === 'error'
 				? '#ec5353'
 				: '#109010',
 	};
 
-	return <h4 style={messageStyle}>{message.text}</h4>;
+	return <h4 style={messageStyle}>{msg.text}</h4>;
 };
 
 export default Notification;
