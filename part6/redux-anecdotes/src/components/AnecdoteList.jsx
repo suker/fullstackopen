@@ -6,7 +6,6 @@ const Anecdote = ({ anecdote }) => {
 	const dispatch = useDispatch();
 
 	const vote = (id) => {
-		console.log('vote', id);
 		dispatch(clickVote(id));
 	};
 
@@ -26,16 +25,26 @@ Anecdote.propTypes = {
 };
 
 const AnecdoteList = () => {
-	const anecdotes = useSelector((state) => state).sort(
-		(a, b) => b.votes - a.votes
-	);
+	const anecdotes = useSelector(({ filter, anecdotes }) => {
+		// console.log('inside useSelector', filter, anecdotes)
+		if (filter) {
+			return anecdotes.filter((anecdote) =>
+				anecdote.content.toLowerCase().includes(filter)
+			);
+		}
+		return anecdotes;
+	}).sort((a, b) => b.votes - a.votes);
 
-	return anecdotes.map((anecdote) => (
-		<Anecdote
-			key={anecdote.id}
-			anecdote={anecdote}
-		/>
-	));
+	return (
+		<>
+			{anecdotes.map((anecdote) => (
+				<Anecdote
+					key={anecdote.id}
+					anecdote={anecdote}
+				/>
+			))}
+		</>
+	);
 };
 
 export default AnecdoteList;
