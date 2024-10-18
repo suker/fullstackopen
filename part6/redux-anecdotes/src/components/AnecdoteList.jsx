@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { clickVote } from '../reducers/anecdoteReducer';
+import { notify, removeNotify } from '../reducers/notificationReducer';
 import PropTypes from 'prop-types';
 
 const Anecdote = ({ anecdote }) => {
@@ -7,6 +8,10 @@ const Anecdote = ({ anecdote }) => {
 
 	const vote = (id) => {
 		dispatch(clickVote(id));
+		dispatch(notify(`You vote '${anecdote.content}'`));
+		setTimeout(() => {
+			dispatch(removeNotify());
+		}, 5000);
 	};
 
 	return (
@@ -25,19 +30,19 @@ Anecdote.propTypes = {
 };
 
 const AnecdoteList = () => {
-	const anecdotes = useSelector(({ filter, anecdotes }) => {
-		// console.log('inside useSelector', filter, anecdotes)
+	const anecdotesList = useSelector(({ filter, anecdotes }) => {
+		const newAnecdotes = [...anecdotes];
 		if (filter) {
-			return anecdotes.filter((anecdote) =>
+			return newAnecdotes.filter((anecdote) =>
 				anecdote.content.toLowerCase().includes(filter)
 			);
 		}
-		return anecdotes;
+		return newAnecdotes;
 	}).sort((a, b) => b.votes - a.votes);
 
 	return (
 		<>
-			{anecdotes.map((anecdote) => (
+			{anecdotesList.map((anecdote) => (
 				<Anecdote
 					key={anecdote.id}
 					anecdote={anecdote}
