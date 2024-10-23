@@ -5,8 +5,14 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getAll, updateAnecdote } from './requests';
 import { useMutation } from '@tanstack/react-query';
 
+import {
+	useNotificationDispatch,
+	displayNotification,
+} from './contexts/NotificationContext';
+
 const App = () => {
 	const queryClient = useQueryClient();
+	const setNotification = useNotificationDispatch();
 
 	const addVoteMutation = useMutation({
 		mutationFn: updateAnecdote,
@@ -16,13 +22,21 @@ const App = () => {
 				anecdote.id === updatedAnecdote.id ? updatedAnecdote : anecdote
 			);
 			queryClient.setQueryData(['anecdotes'], updatedAnecdotes);
+			displayNotification(
+				setNotification,
+				updatedAnecdote.content,
+				'vote',
+				5
+			);
+		},
+		onError: (wtf) => {
+			console.log(wtf);
 		},
 	});
 
 	const handleVote = (anecdote) => {
 		const updatedAnecdote = { ...anecdote, votes: anecdote.votes + 1 };
 		addVoteMutation.mutate(updatedAnecdote);
-		console.log('voting');
 	};
 
 	const result = useQuery({
@@ -31,7 +45,7 @@ const App = () => {
 		retry: 1,
 	});
 
-	console.log(JSON.parse(JSON.stringify(result)));
+	// console.log(JSON.parse(JSON.stringify(result)));
 	if (result.isLoading) {
 		return <div>Loading data...</div>;
 	}
