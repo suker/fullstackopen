@@ -7,6 +7,24 @@ import {
 	Navigate,
 	useNavigate,
 } from 'react-router-dom';
+import { useField } from './hooks';
+
+const ANECDOTES = [
+	{
+		content: 'If it hurts, do it more often',
+		author: 'Jez Humble',
+		info: 'https://martinfowler.com/bliki/FrequencyReducesDifficulty.html',
+		votes: 0,
+		id: 1,
+	},
+	{
+		content: 'Premature optimization is the root of all evil',
+		author: 'Donald Knuth',
+		info: 'http://wiki.c2.com/?PrematureOptimization',
+		votes: 0,
+		id: 2,
+	},
+];
 
 const Menu = () => {
 	const padding = {
@@ -99,19 +117,27 @@ const Footer = () => (
 );
 
 const CreateNew = (props) => {
-	const [content, setContent] = useState('');
-	const [author, setAuthor] = useState('');
-	const [info, setInfo] = useState('');
+	const {reset: resetContent, ...content} = useField('content', 'text');
+	const {reset: resetAuthor, ...author} = useField('author', 'text');
+	const {reset: resetInfo, ...info} = useField('info', 'text');
+
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		props.addNew({
-			content,
-			author,
-			info,
+			content: content.value,
+			author: author.value,
+			info: info.value,
 			votes: 0,
 		});
 	};
+
+	const onReset = (e) => {
+		e.preventDefault();
+		resetContent()
+		resetAuthor()
+		resetInfo()
+	}
 
 	return (
 		<div>
@@ -119,54 +145,28 @@ const CreateNew = (props) => {
 			<form onSubmit={handleSubmit}>
 				<div>
 					content
-					<input
-						name="content"
-						value={content}
-						onChange={(e) => setContent(e.target.value)}
-					/>
+					<input {...content} />
 				</div>
 				<div>
 					author
-					<input
-						name="author"
-						value={author}
-						onChange={(e) => setAuthor(e.target.value)}
-					/>
+					<input {...author} />
 				</div>
 				<div>
 					url for more info
-					<input
-						name="info"
-						value={info}
-						onChange={(e) => setInfo(e.target.value)}
-					/>
+					<input {...info} />
 				</div>
 				<button>create</button>
+				<button onClick={onReset}>delete</button>
 			</form>
 		</div>
 	);
 };
 
 const App = () => {
-	const [anecdotes, setAnecdotes] = useState([
-		{
-			content: 'If it hurts, do it more often',
-			author: 'Jez Humble',
-			info: 'https://martinfowler.com/bliki/FrequencyReducesDifficulty.html',
-			votes: 0,
-			id: 1,
-		},
-		{
-			content: 'Premature optimization is the root of all evil',
-			author: 'Donald Knuth',
-			info: 'http://wiki.c2.com/?PrematureOptimization',
-			votes: 0,
-			id: 2,
-		},
-	]);
+	const [anecdotes, setAnecdotes] = useState(ANECDOTES);
 
 	const [notification, setNotification] = useState('');
-  const navigate = useNavigate()
+	const navigate = useNavigate();
 
 	const match = useMatch('/anecdotes/:id');
 	const anecdote = match
@@ -176,11 +176,11 @@ const App = () => {
 	const addNew = (anecdote) => {
 		anecdote.id = Math.round(Math.random() * 10000);
 		setAnecdotes(anecdotes.concat(anecdote));
-    navigate('/')
-    setNotification(`a new anecdote '${anecdote.content}' created!`)
-    setTimeout(() => {
-      setNotification('')
-    }, 5000);
+		navigate('/');
+		setNotification(`a new anecdote '${anecdote.content}' created!`);
+		setTimeout(() => {
+			setNotification('');
+		}, 5000);
 	};
 
 	const anecdoteById = (id) => anecdotes.find((a) => a.id === id);
@@ -200,7 +200,7 @@ const App = () => {
 		<div>
 			<h1>Software anecdotes</h1>
 			<Menu />
-      {notification}
+			{notification}
 			<Routes>
 				<Route
 					path="/"
